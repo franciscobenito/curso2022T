@@ -1,0 +1,6 @@
+/bin/
+*.snap
+.classpath
+.project
+/.metadata/
+/target/
