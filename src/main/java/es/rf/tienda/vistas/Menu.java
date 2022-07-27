@@ -25,7 +25,7 @@ public class Menu {
 		//Arranco la BBDD
 		//OracleJDBC bbdd = new OracleJDBC();
 		
-		//Ventana principal
+		//Ventana principal 
 		vistaMenu("Menu");		
 	}
 
