@@ -11,7 +11,7 @@ public class GestorCategoria {
 	public void mostrar() {
 		try {
 			FrCategoria frame = new FrCategoria();
-			frame.setIdText(new JTextField(obj.getId_categoria()));
+			frame.setIdText(new JTextField(obj.getId()));
 			
 			//frame.setVisible(true);
 		}catch (Exception e) {

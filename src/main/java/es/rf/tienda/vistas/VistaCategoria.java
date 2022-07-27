@@ -13,7 +13,6 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
-import javax.swing.border.BevelBorder;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
 
@@ -63,17 +62,14 @@ public class VistaCategoria{
 		//Tabla
 		modelo = new DefaultTableModel();
 		tablaCat = new JTable(modelo);
-		scroll = new JScrollPane(tablaCat);
+		scroll = new JScrollPane(tablaCat, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
 		Object[] tituloCat ={"ID", "Nombre", "Descripcion"}; //TODO no se pone el titulo en la tabla
-        modelo.setColumnIdentifiers(tituloCat); 
-		scroll.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED); //TODO no aparece el scroll (ni horizontal ni vertical)
-		scroll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
-		scroll.setBounds(10, 55, 420, 125);
+        modelo.setColumnIdentifiers(tituloCat);
 		
 		//Añadimos los paneles al panel principal
 		panelLabel.add(catLabel);
 		panelTabla.add(tablaCat);
-		panelTabla.add(scroll);
+		panelTabla.add(scroll, BorderLayout.CENTER);
 		panelButton.add(nuevo);
 		panelButton.add(modificar);
 		panelButton.add(ver);

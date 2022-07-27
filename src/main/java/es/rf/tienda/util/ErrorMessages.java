@@ -30,7 +30,7 @@ public class ErrorMessages {
 	
 	public final static String PROERR_004 = "La longitud de ? ha de estar entre ? y ?";
 	
-	public final static String ERM_001 = "Please provide ";
+	public final static String ERM_001 = "Longitud erronea";
 
 	public final static String ERM_002 = "Please provide Lastname";
 	

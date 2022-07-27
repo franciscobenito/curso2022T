@@ -141,7 +141,7 @@ public class OracleJDBC {
 		return retorno;
 	}
 
-	public ResultSet ejecutarQuery(String sql) throws Exception {
+	public static ResultSet ejecutarQuery(String sql) throws Exception {
 		System.out.println("ejecutarQuery:" + sql);
 		Statement stm = null;
 		ResultSet retorno;

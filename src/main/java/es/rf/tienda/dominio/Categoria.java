@@ -21,13 +21,17 @@ public class Categoria extends Modelo{
 	private int id_categoria;			//identificador categoria
 	private String cat_nombre;			//nombre de la categoria
 	private String cat_descripcion;		//descripcion de la categoria
-	private Validator validator;
 	
 	public Categoria(){
 		super("Categoria", "id_categoria");
 		cat_descripcion=null;
-		validator=new Validator();
 	}
+	
+	/*public Categoria (int id_categoria, String cat_nombre, String cat_descripcion) {
+		this.id_categoria = id_categoria;
+		this.cat_nombre = cat_nombre;
+		this.cat_descripcion = cat_descripcion;
+	}*/
 	
 	
 	public boolean isValid(){	
@@ -44,33 +48,21 @@ public class Categoria extends Modelo{
 
 	@Override
 	public int getId() {
-		// TODO Auto-generated method stub
-		return 0;
+		return id_categoria;
 	}
 
 
 	@Override
 	public void setId(int id) {
-		// TODO Auto-generated method stub
-		
+		id_categoria=id;
 	}
 
 
 	@Override
 	public String[] toArray() {
-		// TODO Auto-generated method stub
-		return null;
+		return new String[] {getId()+"", getCat_nombre()+"", getCat_descripcion()+""};
 	}
-	
-	
-	/**
-	 * Getter para identificador de categoria
-	 * @return Integer con el id de la categoria
-	 */
-	public int getId_categoria() {
-		return id_categoria;
-	}
-	
+		
 	/**
 	 * Setter para identificador de categoria
 	 * 
@@ -98,11 +90,11 @@ public class Categoria extends Modelo{
 			else
 				/*throw new DomainException(ErrorMessages.mensajes(ErrorMessages.PROERR_004, new String []
 						{"Nombre categoria", "Alfanumérico"}));*/
-				throw new DomainException(ErrorMessages.ERM_004);
+				throw new DomainException(ErrorMessages.ERM_001);
 			else
 				/*throw new DomainException(ErrorMessages.mensajes(ErrorMessages.PROERR_003, new String []
 						{"Nombre categoria", "" + CAT_NOMBRE_LONG_MIN + "" + CAT_NOMBRE_LONG_MAX}));*/
-				throw new DomainException(ErrorMessages.ERM_003);
+				throw new DomainException(ErrorMessages.ERM_001);
 	}
 	
 	/**
@@ -115,10 +107,17 @@ public class Categoria extends Modelo{
 	
 	/**
 	 * setter para la descripcion de categoria
+	 * @throws DomainException 
 	 * 
 	 */
-	public void setCat_descripcion(String cat_descripcion) {
-		this.cat_descripcion = cat_descripcion;
+	public void setCat_descripcion(String cat_descripcion) throws DomainException {
+		if (Validator.cumpleLongitudMax(cat_descripcion, DESCRIPCION_LONG_MAX))
+			if (Validator.isAlfanumeric(cat_descripcion))
+				this.cat_descripcion = cat_descripcion;
+			else
+				throw new DomainException(ErrorMessages.ERM_001);
+			else
+				throw new DomainException(ErrorMessages.ERM_001);
 	}
 
 
