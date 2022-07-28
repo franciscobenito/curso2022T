@@ -14,12 +14,12 @@ public class OracleJDBC {
 	private static final String JDBC_DRIVER = "oracle.jdbc.driver.OracleDriver";
 	private final static String URL = "jdbc:oracle:thin:@localhost:1521:xe";
 	//private final static String DATABASE = "";
-	private final static String USUARIO = "hr";
-	private final static String PASSWORD = "hr";
+	private final static String USUARIO = "alumno";
+	private final static String PASSWORD = "Curso2022";
 
 	public static void main(String[] argv) {
 		conn = null;
-		OracleJDBC ojdbc = OracleJDBC.getInstance();
+		OracleJDBC.getInstance();
 
 	}
 
@@ -34,7 +34,7 @@ public class OracleJDBC {
 		return instancia;
 	}
 	
-	private void conexion() {
+	private static Connection conexion() {
 		System.out.println("-------- Prueba de conexion a BBDD --------");
 
 		try {
@@ -42,17 +42,16 @@ public class OracleJDBC {
 		} catch (ClassNotFoundException e) {
 			System.out.println("No falta la inclusion del driver de oracle?");
 			e.printStackTrace();
-			return;
 		}
 
 		System.out.println("Oracle JDBC Driver Registered!");
 
 		try {
 			conn = DriverManager.getConnection(URL, USUARIO, PASSWORD);
+			conn.setAutoCommit(false);
 		} catch (SQLException e) {
 			System.out.println("Ha fallado la conexion, compruebe la consola");
 			e.printStackTrace();
-			return;
 		}
 
 		if (conn != null) 
@@ -60,9 +59,10 @@ public class OracleJDBC {
 		else 
 			System.out.println("Error al hacer la conexión!");
 		
+		return conn;
 	}
 
-	public void closeConnection() throws Exception {
+	public static void closeConnection() throws Exception {
 		try {
 			if (conn != null && !conn.isClosed())
 				conn.close();
@@ -74,7 +74,7 @@ public class OracleJDBC {
 		}
 	}
 
-	public void commit() throws Exception {
+	public static void commit() throws Exception {
 		try {
 			if (conn != null)
 				conn.commit();
@@ -84,7 +84,7 @@ public class OracleJDBC {
 		}
 	}
 
-	public void rollback() throws Exception {
+	public static void rollback() throws Exception {
 		try {
 			if (conn != null)
 				conn.rollback();
@@ -94,7 +94,7 @@ public class OracleJDBC {
 		}
 	}
 
-	public void closeStatement(PreparedStatement ps) throws Exception {
+	public static void closeStatement(PreparedStatement ps) throws Exception {
 		try {
 			if (ps != null)
 				ps.close();
@@ -104,7 +104,7 @@ public class OracleJDBC {
 		}
 	}
 
-	public void closeStatement(Statement ps) throws Exception {
+	public static void closeStatement(Statement ps) throws Exception {
 		try {
 			if (ps != null)
 				ps.close();
@@ -124,13 +124,14 @@ public class OracleJDBC {
 		}
 	}
 
-	public int ejecutar(String sql) throws Exception {
+	public static int ejecutar(String sql) throws Exception {
 		System.out.println("ejecutar:" + sql);
 		Statement stm = null;
+		conn=conexion();
 		int retorno;
 		
 		try {
-			stm = conn.createStatement();
+			stm = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE,ResultSet.CONCUR_READ_ONLY);
 			retorno = stm.executeUpdate(sql);
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -145,9 +146,10 @@ public class OracleJDBC {
 		System.out.println("ejecutarQuery:" + sql);
 		Statement stm = null;
 		ResultSet retorno;
+		conn=conexion();
 		
 		try {
-			stm = conn.createStatement();
+			stm = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE,ResultSet.CONCUR_READ_ONLY);
 			retorno = stm.executeQuery(sql);
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -157,7 +159,7 @@ public class OracleJDBC {
 		return retorno;
 	}
 
-	public int consigueClave(String tabla, String campo) throws Exception {
+	public static int consigueClave(String tabla, String campo) throws Exception {
 		String sql = "SELECT MAX(" + campo + ") FROM " + tabla;
 		ResultSet rs = ejecutarQuery(sql);
 		

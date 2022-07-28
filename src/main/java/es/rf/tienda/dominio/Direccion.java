@@ -4,10 +4,10 @@ package es.rf.tienda.dominio;
 
 public class Direccion {
 
-	private static final int NOMBRE_LONG_MAX = 30;
+	/*private static final int NOMBRE_LONG_MAX = 30;
 	private static final int NOMBRE_LONG_MIN = 5;
 	private static final int DIRECCION_LONG_MAX = 30;
-	private static final int DIRECCION_LONG_MIN = 5;
+	private static final int DIRECCION_LONG_MIN = 5;*/
 	
 	private String dir_nombre;
 	private String dir_direccion;

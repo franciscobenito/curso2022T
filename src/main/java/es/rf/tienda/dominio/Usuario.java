@@ -1,18 +1,17 @@
 package es.rf.tienda.dominio;
 
 import java.util.Calendar;
-import java.util.Date;
 
 public class Usuario {
 
-	private static final int NOMBRE_LONG_MAX = 100;
+	/*private static final int NOMBRE_LONG_MAX = 100;
 	private static final int NOMBRE_LONG_MIN = 5;
 	private static final int EMAIL_LONG_MAX = 100;
 	private static final int EMAIL_LONG_MIN = 6;
 	private static final int PASSWORD_LONG_MAX = 20;
 	private static final int PASSWORD_LONG_MIN = 8;
 	private static final int DNI_LONG_MAX = 12;
-	private static final int DNI_LONG_MIN = 12;
+	private static final int DNI_LONG_MIN = 12;*/
 	
 	private int id_usuario;
 	private String user_nombre;
