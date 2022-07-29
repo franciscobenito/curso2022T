@@ -145,18 +145,18 @@ public class OracleJDBC {
 	public static ResultSet ejecutarQuery(String sql) throws Exception {
 		System.out.println("ejecutarQuery:" + sql);
 		Statement stm = null;
-		ResultSet retorno;
+		ResultSet rs;
 		conn=conexion();
 		
 		try {
 			stm = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE,ResultSet.CONCUR_READ_ONLY);
-			retorno = stm.executeQuery(sql);
+			rs = stm.executeQuery(sql);
 		} catch (SQLException e) {
 			e.printStackTrace();
 			throw (new Exception("error en " + sql));
 		}
 		
-		return retorno;
+		return rs;
 	}
 
 	public static int consigueClave(String tabla, String campo) throws Exception {
