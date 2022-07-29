@@ -7,24 +7,15 @@ import es.rf.tienda.dominio.Categoria;
 import es.rf.tienda.exception.DAOException;
 import es.rf.tienda.exception.DomainException;
 import es.rf.tienda.objetos.daos.CategoriaDAO;
-import es.rf.tienda.vistas.VistaCategoria;
 
 public class ControladorCat implements Controlador<Categoria>{
 
 	private CategoriaDAO cDAO;
-	//private VistaCategoria vistaCat;
 	
 	public ControladorCat() throws DAOException, DomainException {
 		super();
+		cDAO = new CategoriaDAO();
 	}
-	
-	public ControladorCat(VistaCategoria vistaCat) {
-		cDAO = new CategoriaDAO();;
-		//this.vistaCat = vistaCat;
-		
-		//vistaCat.setControlador(this);
-	}
-
 	
 	//TODO
 	/*private void setOption(String option, Categoria cat) { 
@@ -49,20 +40,17 @@ public class ControladorCat implements Controlador<Categoria>{
 
 	@Override
 	public Categoria leer(Categoria obj) {
-		// TODO Auto-generated method stub
-		return null;
+		return cDAO.listarUnaCategoria(obj);
 	}
 
 	@Override
 	public List<Categoria> leerTodos() {
-		// TODO Auto-generated method stub
-		return null;
+		return cDAO.listarCategorias();
 	}
 
 	@Override
 	public List<Categoria> leerSQL(String sql) {
-		// TODO Auto-generated method stub
-		return null;
+		return cDAO.leerSQL(sql);
 	}
 	
 	@Override
@@ -72,14 +60,12 @@ public class ControladorCat implements Controlador<Categoria>{
 
 	@Override
 	public boolean actualizar(Categoria obj) {
-		// TODO Auto-generated method stub
-		return false;
+		return cDAO.actualizarCategoria(obj);			
 	}
 
 	@Override
 	public boolean borrar(Categoria obj) {
-		// TODO Auto-generated method stub
-		return false;
+		return cDAO.borrarCategoria(obj);
 	}
 
 	@Override

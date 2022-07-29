@@ -23,13 +23,14 @@ public class Menu {
 	private static JButton usuarios;
 	private static JButton salir;
 	
+	//private static ControladorCat controlador;
 	private static Connection conn;
 	private static final String JDBC_DRIVER = "oracle.jdbc.driver.OracleDriver";
 	private final static String URL = "jdbc:oracle:thin:@localhost:1521:xe";
 	private final static String USUARIO = "alumno";
 	private final static String PASSWORD = "Curso2022";
 	
-	public static void main(String[] args) {
+	public static void main(String[] args) throws DAOException, DomainException {
 		//Arranco la BBDD
 		System.out.println("-------- Prueba de conexion a BBDD --------");
 
@@ -54,6 +55,8 @@ public class Menu {
 			System.out.println("Hecho!, Ya tiene pleno acceso al gestor de la BBDD");
 		else 
 			System.out.println("Error al hacer la conexión!");
+		
+		//controlador = new ControladorCat();
 		
 		//Ventana principal
 		vistaMenu("Menu");		

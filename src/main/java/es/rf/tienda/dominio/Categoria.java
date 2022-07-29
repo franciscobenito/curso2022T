@@ -26,11 +26,6 @@ public class Categoria{
 	public boolean isValid(){	
 		return !Validator.isVacio(cat_nombre) && id_categoria > 0;
 	}
-	
-	public String toString() {
-		return "Categoria [id_categoria=" + id_categoria + ", cat_nombre=" + cat_nombre + ", cat_descripcion=" + cat_descripcion + "]";
-	}
-
 
 	public int getId() {
 		return id_categoria;
@@ -83,42 +78,5 @@ public class Categoria{
 	 */
 	public void setCat_descripcion(String cat_descripcion) throws DomainException {
 		this.cat_descripcion = cat_descripcion;
-	}
-
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((cat_descripcion == null) ? 0 : cat_descripcion.hashCode());
-		result = prime * result + ((cat_nombre == null) ? 0 : cat_nombre.hashCode());
-		result = prime * result + id_categoria;
-		return result;
-	}
-
-
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		
-		Categoria other = (Categoria) obj;
-		if (cat_descripcion == null) {
-			if (other.cat_descripcion != null)
-				return false;
-		} else if (!cat_descripcion.equals(other.cat_descripcion))
-			return false;
-		
-		if (cat_nombre == null) {
-			if (other.cat_nombre != null)
-				return false;
-		} else if (!cat_nombre.equals(other.cat_nombre))
-			return false;
-		
-		if (id_categoria != other.id_categoria)
-			return false;
-		
-		return true;
 	}
 }

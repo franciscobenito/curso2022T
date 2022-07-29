@@ -35,7 +35,7 @@ public class OracleJDBC {
 	}
 	
 	private static Connection conexion() {
-		System.out.println("-------- Prueba de conexion a BBDD --------");
+		//System.out.println("-------- Prueba de conexion a BBDD --------");
 
 		try {
 			Class.forName(JDBC_DRIVER);
@@ -44,7 +44,7 @@ public class OracleJDBC {
 			e.printStackTrace();
 		}
 
-		System.out.println("Oracle JDBC Driver Registered!");
+		//System.out.println("Oracle JDBC Driver Registered!");
 
 		try {
 			conn = DriverManager.getConnection(URL, USUARIO, PASSWORD);
@@ -54,11 +54,11 @@ public class OracleJDBC {
 			e.printStackTrace();
 		}
 
-		if (conn != null) 
+		/*if (conn != null) 
 			System.out.println("Hecho!, Ya tiene pleno acceso al gestor de la BBDD");
 		else 
 			System.out.println("Error al hacer la conexión!");
-		
+		*/
 		return conn;
 	}
 
@@ -120,7 +120,7 @@ public class OracleJDBC {
 				rs.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
-			throw new Exception("No ha sido posible realizar operaci�n close sobre elemento ResultSet");
+			throw new Exception("No ha sido posible realizar operación close sobre elemento ResultSet");
 		}
 	}
 
@@ -145,18 +145,18 @@ public class OracleJDBC {
 	public static ResultSet ejecutarQuery(String sql) throws Exception {
 		System.out.println("ejecutarQuery:" + sql);
 		Statement stm = null;
-		ResultSet retorno;
+		ResultSet rs;
 		conn=conexion();
 		
 		try {
 			stm = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE,ResultSet.CONCUR_READ_ONLY);
-			retorno = stm.executeQuery(sql);
+			rs = stm.executeQuery(sql);
 		} catch (SQLException e) {
 			e.printStackTrace();
 			throw (new Exception("error en " + sql));
 		}
 		
-		return retorno;
+		return rs;
 	}
 
 	public static int consigueClave(String tabla, String campo) throws Exception {
