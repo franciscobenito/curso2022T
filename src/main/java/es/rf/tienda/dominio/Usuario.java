@@ -2,17 +2,9 @@ package es.rf.tienda.dominio;
 
 import java.util.Calendar;
 
-public class Usuario {
+import es.rf.tienda.util.Validator;
 
-	/*private static final int NOMBRE_LONG_MAX = 100;
-	private static final int NOMBRE_LONG_MIN = 5;
-	private static final int EMAIL_LONG_MAX = 100;
-	private static final int EMAIL_LONG_MIN = 6;
-	private static final int PASSWORD_LONG_MAX = 20;
-	private static final int PASSWORD_LONG_MIN = 8;
-	private static final int DNI_LONG_MAX = 12;
-	private static final int DNI_LONG_MIN = 12;*/
-	
+public class Usuario {
 	private int id_usuario;
 	private String user_nombre;
 	private String user_email;
@@ -23,12 +15,13 @@ public class Usuario {
 	private Calendar user_fecConfirmacion;
 	
 	
-	public Usuario() {
-		user_dni=null;
-		user_fecAlta=null;
-		user_fecConfirmacion=null;
+	public Usuario(int id_usuario) {
+		this.id_usuario=id_usuario;
 	}
 
+	public boolean isValid(){	
+		return !Validator.isVacio(user_dni) && !Validator.isVacio(user_nombre) && id_usuario > 0;
+	}
 
 	public int getId_usuario() {
 		return id_usuario;

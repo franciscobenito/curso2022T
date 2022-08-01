@@ -3,15 +3,13 @@ package es.rf.tienda.vistas;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
+import es.rf.tienda.controladores.ControladorCat;
 import es.rf.tienda.exception.DAOException;
 import es.rf.tienda.exception.DomainException;
 
@@ -23,40 +21,11 @@ public class Menu {
 	private static JButton usuarios;
 	private static JButton salir;
 	
-	//private static ControladorCat controlador;
-	private static Connection conn;
-	private static final String JDBC_DRIVER = "oracle.jdbc.driver.OracleDriver";
-	private final static String URL = "jdbc:oracle:thin:@localhost:1521:xe";
-	private final static String USUARIO = "alumno";
-	private final static String PASSWORD = "Curso2022";
+	private static ControladorCat controlador;
 	
 	public static void main(String[] args) throws DAOException, DomainException {
-		//Arranco la BBDD
-		System.out.println("-------- Prueba de conexion a BBDD --------");
-
-		try {
-			Class.forName(JDBC_DRIVER);
-		} catch (ClassNotFoundException e) {
-			System.out.println("No falta la inclusion del driver de oracle?");
-			e.printStackTrace();
-		}
-
-		System.out.println("Oracle JDBC Driver Registered!");
-
-		try {
-			conn = DriverManager.getConnection(URL, USUARIO, PASSWORD);
-			conn.setAutoCommit(false);
-		} catch (SQLException e) {
-			System.out.println("Ha fallado la conexion, compruebe la consola");
-			e.printStackTrace();
-		}
-
-		if (conn != null) 
-			System.out.println("Hecho!, Ya tiene pleno acceso al gestor de la BBDD");
-		else 
-			System.out.println("Error al hacer la conexión!");
-		
-		//controlador = new ControladorCat();
+		//Arranco el controlador y, por tanto, la BBDD
+		controlador = new ControladorCat();
 		
 		//Ventana principal
 		vistaMenu("Menu");		
@@ -91,6 +60,16 @@ public class Menu {
 				try {
 					@SuppressWarnings("unused")
 					VistaCategoria vistaC = new VistaCategoria();
+				} catch (DAOException | DomainException e1) {
+					e1.printStackTrace();
+				}
+			}
+		});
+		usuarios.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				try {
+					@SuppressWarnings("unused")
+					VistaUsuario vistaU = new VistaUsuario();
 				} catch (DAOException | DomainException e1) {
 					e1.printStackTrace();
 				}
