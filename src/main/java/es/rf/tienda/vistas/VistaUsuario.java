@@ -30,12 +30,12 @@ public class VistaUsuario {
 	private JPanel panelLabel;
 	private JPanel panelTabla;
 	private JPanel panelButton;
-	private JLabel catLabel;
+	private JLabel usuLabel;
 	private JButton nuevo;
 	private JButton modificar;
 	private JButton ver;
 	private JButton salir;
-	private JTable tablaCat;
+	private JTable tablaUsu;
 	//private DefaultTableModel modelo;
 	private JScrollPane scroll;
 	
@@ -73,25 +73,25 @@ public class VistaUsuario {
 		panelButton.setLayout(new FlowLayout());
 				
 		//Contenedores
-		catLabel = new JLabel("Tabla de usuarios");
+		usuLabel = new JLabel("Tabla de usuarios");
 		nuevo = new JButton("Nuevo");
 		modificar = new JButton("Modificar");
 		ver = new JButton("Ver");
 		salir = new JButton("Salir");
 		//Tabla
-		List<Usuario> listaCat = controlador.leerTodos();
-		String[][] objeto = new String[listaCat.size()][3];
-		for(int i = 0; i < listaCat.size(); i++) {
-			objeto[i][0] = Integer.toString(listaCat.get(i).getId_usuario());
-			objeto[i][1] = listaCat.get(i).getUser_nombre();
+		List<Usuario> listaUsu = controlador.leerTodos();
+		String[][] objeto = new String[listaUsu.size()][3];
+		for(int i = 0; i < listaUsu.size(); i++) {
+			objeto[i][0] = Integer.toString(listaUsu.get(i).getId_usuario());
+			objeto[i][1] = listaUsu.get(i).getUser_nombre();
 		}
         String[] tituloCol = { "ID", "Nombre"};
-        tablaCat = new JTable(objeto, tituloCol);
-		scroll = new JScrollPane(tablaCat, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
+        tablaUsu = new JTable(objeto, tituloCol);
+		scroll = new JScrollPane(tablaUsu, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
 		
 		//Añadimos los paneles al panel principal
-		panelLabel.add(catLabel);
-		panelTabla.add(tablaCat);
+		panelLabel.add(usuLabel);
+		panelTabla.add(tablaUsu);
 		panelTabla.add(scroll, BorderLayout.CENTER);
 		panelButton.add(nuevo);
 		panelButton.add(modificar);
@@ -113,11 +113,11 @@ public class VistaUsuario {
 		});
 		modificar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				tablaCat.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+				tablaUsu.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
 				    @Override
 				    public void valueChanged(ListSelectionEvent event) {
-				        if (tablaCat.getSelectedRow() > -1) {
-				        	int id = Integer.parseInt(tablaCat.getValueAt(tablaCat.getSelectedRow(), 0).toString());
+				        if (tablaUsu.getSelectedRow() > -1) {
+				        	int id = Integer.parseInt(tablaUsu.getValueAt(tablaUsu.getSelectedRow(), 0).toString());
 				        	//String nombre = tablaCat.getValueAt(tablaCat.getSelectedRow(), 1).toString();
 				        	//String desc = tablaCat.getValueAt(tablaCat.getSelectedRow(), 2).toString();
 				        	usu=new Usuario(id);
@@ -129,11 +129,11 @@ public class VistaUsuario {
 		});
 		ver.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				tablaCat.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+				tablaUsu.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
 				    @Override
 				    public void valueChanged(ListSelectionEvent event) {
-				        if (tablaCat.getSelectedRow() > -1) {
-				        	int id = Integer.parseInt(tablaCat.getValueAt(tablaCat.getSelectedRow(), 0).toString());
+				        if (tablaUsu.getSelectedRow() > -1) {
+				        	int id = Integer.parseInt(tablaUsu.getValueAt(tablaUsu.getSelectedRow(), 0).toString());
 				        	//String nombre = tablaCat.getValueAt(tablaCat.getSelectedRow(), 1).toString();
 				        	//String desc = tablaCat.getValueAt(tablaCat.getSelectedRow(), 2).toString();
 				        	usu=new Usuario(id);
@@ -283,7 +283,7 @@ public class VistaUsuario {
 					objeto[i][1] = listaUsu.get(i).getUser_nombre();
 				}
 				
-				tablaCat = new JTable(objeto, null);
+				tablaUsu = new JTable(objeto, null);
 				
 			    frame2.setVisible(false);
 				frame2.dispose();

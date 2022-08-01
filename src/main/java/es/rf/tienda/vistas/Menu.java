@@ -9,7 +9,6 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
-import es.rf.tienda.controladores.ControladorCat;
 import es.rf.tienda.exception.DAOException;
 import es.rf.tienda.exception.DomainException;
 
@@ -20,13 +19,8 @@ public class Menu {
 	private static JButton categorias;
 	private static JButton usuarios;
 	private static JButton salir;
-	
-	private static ControladorCat controlador;
-	
+
 	public static void main(String[] args) throws DAOException, DomainException {
-		//Arranco el controlador y, por tanto, la BBDD
-		controlador = new ControladorCat();
-		
 		//Ventana principal
 		vistaMenu("Menu");		
 	}
