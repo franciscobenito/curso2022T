@@ -31,27 +31,20 @@ public class VistaUsuario {
 	private JPanel panelTabla;
 	private JPanel panelButton;
 	private JLabel usuLabel;
-	private JButton nuevo;
-	private JButton modificar;
-	private JButton ver;
-	private JButton salir;
+	private JButton botonCrear;
+	private JButton botonModif;
+	private JButton botonVer;
+	private JButton botonBorrar;
+	private JButton botonSalir;
 	private JTable tablaUsu;
-	//private DefaultTableModel modelo;
 	private JScrollPane scroll;
 	
 	private static ControladorUsu controlador;
 	private Usuario usu;
 	
 	public VistaUsuario() throws DAOException, DomainException{
-		vista("Usuarios");
+		vista("Usuarios");				//TODO: solucionar los dos errores como los de VistaCategoría y, además, terminar la clase. Faltan columnas de la tabla para ver/modificar
 	}
-	
-	//private static VistaUsuario instancia;
-	
-	//public static VistaUsuario getInstance() throws DAOException, DomainException {
-	//	if (instancia==null) instancia = new VistaUsuario();
-	//	return instancia;
-	//}
 
 	public void vista (String title) throws DAOException, DomainException {
 		controlador = new ControladorUsu();
@@ -74,10 +67,12 @@ public class VistaUsuario {
 				
 		//Contenedores
 		usuLabel = new JLabel("Tabla de usuarios");
-		nuevo = new JButton("Nuevo");
-		modificar = new JButton("Modificar");
-		ver = new JButton("Ver");
-		salir = new JButton("Salir");
+		botonCrear = new JButton("Nuevo");
+		botonModif = new JButton("Modificar");
+		botonVer = new JButton("Ver");
+		botonBorrar = new JButton("Borrar");
+		botonSalir = new JButton("Salir");
+		
 		//Tabla
 		List<Usuario> listaUsu = controlador.leerTodos();
 		String[][] objeto = new String[listaUsu.size()][3];
@@ -89,14 +84,28 @@ public class VistaUsuario {
         tablaUsu = new JTable(objeto, tituloCol);
 		scroll = new JScrollPane(tablaUsu, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
 		
+		//Activo el listener para seleccionar una fila de la tabla
+		tablaUsu.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+			@Override
+			public void valueChanged(ListSelectionEvent e) {
+				if(!e.getValueIsAdjusting()) {
+			    	if (tablaUsu.getSelectedRow() > -1) {
+			        	int idSelec = Integer.parseInt(tablaUsu.getValueAt(tablaUsu.getSelectedRow(), 0).toString());
+			        	usu=new Usuario(idSelec);
+			        }
+		    	}
+			}
+		});
+		
 		//Añadimos los paneles al panel principal
 		panelLabel.add(usuLabel);
 		panelTabla.add(tablaUsu);
 		panelTabla.add(scroll, BorderLayout.CENTER);
-		panelButton.add(nuevo);
-		panelButton.add(modificar);
-		panelButton.add(ver);
-		panelButton.add(salir);
+		panelButton.add(botonCrear);
+		panelButton.add(botonModif);
+		panelButton.add(botonVer);
+		panelButton.add(botonBorrar);
+		panelButton.add(botonSalir);
 				
 		panel.add(panelLabel, BorderLayout.NORTH);
 		panel.add(panelTabla, BorderLayout.CENTER);
@@ -106,61 +115,70 @@ public class VistaUsuario {
 		frame.setVisible(true);
 		
 		//Acción botones
-		nuevo.addActionListener(new ActionListener() {
+		botonCrear.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				crearNuevoUsu();
 			}
 		});
-		modificar.addActionListener(new ActionListener() {
+		botonModif.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				tablaUsu.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
-				    @Override
-				    public void valueChanged(ListSelectionEvent event) {
-				        if (tablaUsu.getSelectedRow() > -1) {
-				        	int id = Integer.parseInt(tablaUsu.getValueAt(tablaUsu.getSelectedRow(), 0).toString());
-				        	//String nombre = tablaCat.getValueAt(tablaCat.getSelectedRow(), 1).toString();
-				        	//String desc = tablaCat.getValueAt(tablaCat.getSelectedRow(), 2).toString();
-				        	usu=new Usuario(id);
-				        	modificarUsu(usu);
-				        }
-				    }
-				});	
+				modificarUsu(usu);
 			}
 		});
-		ver.addActionListener(new ActionListener() {
+		botonVer.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				tablaUsu.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
-				    @Override
-				    public void valueChanged(ListSelectionEvent event) {
-				        if (tablaUsu.getSelectedRow() > -1) {
-				        	int id = Integer.parseInt(tablaUsu.getValueAt(tablaUsu.getSelectedRow(), 0).toString());
-				        	//String nombre = tablaCat.getValueAt(tablaCat.getSelectedRow(), 1).toString();
-				        	//String desc = tablaCat.getValueAt(tablaCat.getSelectedRow(), 2).toString();
-				        	usu=new Usuario(id);
-				        	verUsuario(usu);
-				        }
-				        else
-				        	System.out.println("Selecciona una fila de la tabla");
-				    }
-				});
-				
+				verUsuario(usu);
 			}
 		});
-		salir.addActionListener(new ActionListener() {
+		botonBorrar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				borrarUsuario(usu);
+			}
+		});
+		botonSalir.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				frame.setVisible(false);
 				frame.dispose();
 			}
 		});		
 	}
-
-	//TODO: conseguir que cree la categoría bien. El error estará en el CategoriaDAO seguramente. Porque no la crea en la bbdd
-	/****************************
-	 * CREA UNA CATEGORIA NUEVA *
-	 ****************************/
+	
+	/**
+	 * CREA UNA USUARIO NUEVO
+	 */
 	public void crearNuevoUsu() {
-		//Nueva ventana para crear categorías
-		JFrame frame2 = new JFrame("Añadir categoría");
+		ventanaNueva("Crear usuario");
+	}
+	
+	/**
+	 * MODIFICA UNA CATEGORIA
+	 * @param cat Categoría a modificar
+	 */
+	public void modificarUsu(Usuario usu) {
+		ventanaNueva("Modificar usuario");
+	}
+	
+	/**
+	 * MUESTRA UNA CATEGORIA 
+	 * @param cat Categoría a ver
+	 */
+	public void verUsuario(Usuario usu) {
+		controlador.leer(usu);
+		ventanaNueva("Ver usuario");
+	}
+	
+	public void borrarUsuario(Usuario usu) {
+		if (controlador.borrar(usu))
+			System.out.println("Categoria borrada");
+	}
+	
+	/**
+	 * Crea la ventana para crear una categoría nueva, o para modificar o ver una ya existente
+	 * @param titulo Título de la ventana nueca++va
+	 * @return la ventana nueva
+	 */
+	private JFrame ventanaNueva(String titulo) {
+		JFrame frame2 = new JFrame(titulo);
 		frame2.getContentPane().setLayout(new BorderLayout());
 		frame2.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame2.setSize(400,150);
@@ -184,112 +202,62 @@ public class VistaUsuario {
 		JLabel idLabel = new JLabel("ID");
 		JLabel nombreLabel = new JLabel("Nombre");
 		JTextField idText = new JTextField();
+		idText.setEditable(false);
 		JTextField nombreText = new JTextField();
-		JButton aceptar = new JButton("Aceptar");
-		JButton cancelar = new JButton("Cancelar");
+		JTextField descripcionText = new JTextField();
+		JButton botonAceptarCrear = new JButton("Crear");
+		JButton botonAceptarModif = new JButton("Modificar");
+		JButton botonSalir = new JButton("Salir");
 		
+		switch (titulo) {
+			case "Crear usuario":
+				panelButton2.add(botonAceptarCrear);	
+			break;
+				
+			case "Modificar usuario":
+				idText.setText(""+usu.getId_usuario());
+				nombreText.setText(usu.getUser_nombre());
+				nombreText.setEditable(true);
+				panelButton2.add(botonAceptarModif);	
+			break;
+			
+			case "Ver usuario":
+				idText.setText(""+usu.getId_usuario());
+				nombreText.setText(usu.getUser_nombre());
+				nombreText.setEditable(false);
+			break;
+		}
+		
+		panelButton2.add(botonSalir);	
 		panelLabel2.add(idLabel);
 		panelLabel2.add(nombreLabel);
 		panelText2.add(idText);
 		panelText2.add(nombreText);
-		panelButton2.add(aceptar);
-		panelButton2.add(cancelar);	
+		panelText2.add(descripcionText);
 		
 		//Acción de botones
-		aceptar.addActionListener(new ActionListener() {
+		botonAceptarCrear.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				try {
-					Integer.parseInt(idText.getText());
-					if(!idText.getText().equals("") && !nombreText.getText().equals("")) {
-						usu = new Usuario(Integer.parseInt(idText.getText()));
-						controlador.grabar(usu);
-					}
-				}catch(Exception e1){
-					e1.getMessage();
-					System.out.println("¡El id debe ser un valor numerico!");
-				}finally {
-					controlador.leerTodos();
-					frame2.setVisible(false);
-					frame2.dispose();
+				if(!nombreText.getText().equals("")) {
+					usu = new Usuario(Integer.parseInt(idText.getText()));
+					controlador.grabar(usu);
 				}
-			}
-		});	
-		cancelar.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
+				
 				frame2.setVisible(false);
 				frame2.dispose();
 			}
 		});	
-		
-		frame2.setContentPane(panel2);
-		frame2.setVisible(true);
-	}
-	
-	//TODO: conseguir que modifique una fila existente y que muestre la categoria seleccionada
-	/****************************
-	 *  MODIFICA UNA CATEGORIA  *
-	 ****************************/
-	public void modificarUsu(Usuario usu) {
-		//Nueva ventana para modificar usuarios
-		JFrame frame2 = new JFrame("Modificar Usuario");
-		frame2.getContentPane().setLayout(new BorderLayout());
-		frame2.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame2.setSize(400,150);
-		frame2.setLocationRelativeTo(null);
-		
-		//Paneles
-		JPanel panel2 = new JPanel();
-		panel2.setLayout(new BorderLayout());
-		JPanel panelLabel2 = new JPanel();
-		panelLabel2.setLayout(new GridLayout(3,1));
-		JPanel panelText2 = new JPanel();
-		panelText2.setLayout(new GridLayout(3,1));
-		JPanel panelButton2 = new JPanel();
-		panelButton2.setLayout(new FlowLayout());
-		
-		panel2.add(panelLabel2, BorderLayout.WEST);
-		panel2.add(panelText2, BorderLayout.CENTER);
-		panel2.add(panelButton2, BorderLayout.SOUTH);
-		
-		//Contenedores
-		JLabel idLabel = new JLabel("ID");
-		JLabel nombreLabel = new JLabel("Nombre");
-		
-		JTextField idText = new JTextField(usu.getId_usuario());
-		idText.setEditable(false);
-		JTextField nombreText = new JTextField(usu.getUser_nombre());
-		
-		JButton aceptar = new JButton("Aceptar");
-		JButton cancelar = new JButton("Cancelar");
-		
-		panelLabel2.add(idLabel);
-		panelLabel2.add(nombreLabel);
-		panelText2.add(idText);
-		panelText2.add(nombreText);
-		panelButton2.add(aceptar);
-		panelButton2.add(cancelar);	
-		
-		//Acción de botones
-		aceptar.addActionListener(new ActionListener() {
+		botonAceptarModif.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {	
 				Usuario usuActualizado = new Usuario(Integer.parseInt(idText.getText()));
 				if (controlador.actualizar(usuActualizado))
-					System.out.println("Categoria modificada");
-				
-				List<Usuario> listaUsu = controlador.leerTodos();
-				String[][] objeto = new String[listaUsu.size()][3];
-				for(int i = 0; i < listaUsu.size(); i++) {
-					objeto[i][0] = Integer.toString(listaUsu.get(i).getId_usuario());
-					objeto[i][1] = listaUsu.get(i).getUser_nombre();
-				}
-				
-				tablaUsu = new JTable(objeto, null);
+					System.out.println("Usuario modificado");
 				
 			    frame2.setVisible(false);
 				frame2.dispose();
 			}
 		});	
-		cancelar.addActionListener(new ActionListener() {
+		botonSalir.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				frame2.setVisible(false);
 				frame2.dispose();
@@ -298,62 +266,7 @@ public class VistaUsuario {
 		
 		frame2.setContentPane(panel2);
 		frame2.setVisible(true);
-	}
-
-	//TODO: conseguir que muestre sólo una ventana. Ahora se abren hasta 4. Tampoco se ve la id_categoria
-	/****************************
-	 *  MUESTRA UN USUARIO   *
-	 ****************************/
-	public void verUsuario(Usuario usu) {
-		controlador.leer(usu);
 		
-		//Nueva ventana para modificar categorías
-		JFrame frame2 = new JFrame("Ver categoría");
-		frame2.getContentPane().setLayout(new BorderLayout());
-		frame2.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame2.setSize(400,150);
-		frame2.setLocationRelativeTo(null);
-		
-		//Paneles
-		JPanel panel2 = new JPanel();
-		panel2.setLayout(new BorderLayout());
-		JPanel panelLabel2 = new JPanel();
-		panelLabel2.setLayout(new GridLayout(3,1));
-		JPanel panelText2 = new JPanel();
-		panelText2.setLayout(new GridLayout(3,1));
-		JPanel panelButton2 = new JPanel();
-		panelButton2.setLayout(new FlowLayout());
-		
-		panel2.add(panelLabel2, BorderLayout.WEST);
-		panel2.add(panelText2, BorderLayout.CENTER);
-		panel2.add(panelButton2, BorderLayout.SOUTH);
-		
-		//Contenedores
-		JLabel idLabel = new JLabel("ID");
-		JLabel nombreLabel = new JLabel("Nombre");
-
-		JTextField idText = new JTextField(usu.getId_usuario());
-		idText.setEditable(false);
-		JTextField nombreText = new JTextField(usu.getUser_nombre());
-		nombreText.setEditable(false);
-		
-		JButton salir = new JButton("Salir");
-		
-		panelLabel2.add(idLabel);
-		panelLabel2.add(nombreLabel);
-		panelText2.add(idText);
-		panelText2.add(nombreText);
-		panelButton2.add(salir);	
-		
-		//Acción de botones
-		salir.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				frame2.setVisible(false);
-				frame2.dispose();
-			}
-		});	
-		
-		frame2.setContentPane(panel2);
-		frame2.setVisible(true);
+		return frame2;
 	}
 }

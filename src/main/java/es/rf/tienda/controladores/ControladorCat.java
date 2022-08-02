@@ -17,27 +17,6 @@ public class ControladorCat implements Controlador<Categoria>{
 		cDAO = new CategoriaDAO();
 	}
 	
-	//TODO
-	/*private void setOption(String option, Categoria cat) { 
-	
-		try {
-			switch (option) {
-			case "ADD":
-				
-				break;
-			case "UPDATE":
-				
-				break;
-			case "DELETE":
-				
-				break;
-			}
-		}catch (Exception e) {
-			e.getMessage();
-		}
-		
-	}*/
-
 	@Override
 	public Categoria leer(Categoria obj) {
 		return cDAO.listarUnaCategoria(obj);

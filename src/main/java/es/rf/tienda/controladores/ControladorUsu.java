@@ -16,27 +16,6 @@ public class ControladorUsu implements Controlador<Usuario>{
 		super();
 		uDAO = new UsuarioDAO();
 	}
-	
-	//TODO
-	/*private void setOption(String option, Categoria cat) { 
-	
-		try {
-			switch (option) {
-			case "ADD":
-				
-				break;
-			case "UPDATE":
-				
-				break;
-			case "DELETE":
-				
-				break;
-			}
-		}catch (Exception e) {
-			e.getMessage();
-		}
-		
-	}*/
 
 	@Override
 	public Usuario leer(Usuario obj) {
@@ -73,4 +52,5 @@ public class ControladorUsu implements Controlador<Usuario>{
 		// TODO Auto-generated method stub
 		return null;
 	}
+
 }

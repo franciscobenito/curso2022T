@@ -14,17 +14,17 @@ public class UsuarioDAO {
 	
 	public List<Usuario> listarUsuarios() {
 		ResultSet rs;
-		String sql ="SELECT * FROM Usuario";
+		String sql ="SELECT * FROM USUARIO";
 		List<Usuario> lista = new ArrayList<>();
 		try {
 			rs = OracleJDBC.ejecutarQuery(sql);
-			if(OracleJDBC.ejecutar(sql)>1)
-				OracleJDBC.commit();
+			OracleJDBC.ejecutarQuery(sql);
+			OracleJDBC.commit();
 			
 			while (rs.next()) {
-				  int id = rs.getInt("ID_Usuario");
-				  Usuario cat = new Usuario(id);
-				  lista.add(cat);
+				  int id = rs.getInt("ID_USUARIO");
+				  Usuario usu = new Usuario(id);
+				  lista.add(usu);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -33,26 +33,26 @@ public class UsuarioDAO {
 	}
 
 	public Usuario listarUnUsuario(Usuario obj) {
-		String sql = "SELECT * FROM Usuario WHERE ";
+		String sql = "SELECT * FROM USUARIO WHERE ";
 
 		if (obj.getId_usuario() != 0) {
-			sql = sql + "ID_Usuario = " + obj.getId_usuario();
+			sql = sql + "ID_USUARIO = " + obj.getId_usuario();
 		} else if (!Validator.isVacio(obj.getUser_nombre())) {
-			sql = sql + "CAT_NOMBRE = '" + obj.getUser_nombre() + "'";
+			sql = sql + "USER_NOMBRE = '" + obj.getUser_nombre() + "'";
 		}
 		
-		Usuario cat = null;
+		Usuario usu = null;
 		
 		try {
 			ResultSet rs = OracleJDBC.ejecutarQuery(sql);
-			if(OracleJDBC.ejecutar(sql)>1)
-				OracleJDBC.commit();
-			cat = new Usuario(rs.getInt(1));
+			OracleJDBC.ejecutarQuery(sql);
+			OracleJDBC.commit();
+			usu = new Usuario(rs.getInt(1));
 		} catch (Exception e) {
 			e.getMessage();
 		}
 		
-		return cat;
+		return usu;
 	}
 	
 	public List<Usuario> leerSQL(String sql) {
@@ -60,10 +60,10 @@ public class UsuarioDAO {
 
 		try {
 			ResultSet rs = OracleJDBC.ejecutarQuery(sql);
-			if(OracleJDBC.ejecutar(sql)>1)
-				OracleJDBC.commit();
-			Usuario c = new Usuario(rs.getInt(1));
-			lista.add(c);
+			OracleJDBC.ejecutarQuery(sql);
+			OracleJDBC.commit();
+			Usuario u = new Usuario(rs.getInt(1));
+			lista.add(u);
 			
 		} catch (Exception e) {
 			e.getMessage();
@@ -73,15 +73,12 @@ public class UsuarioDAO {
 	}
 	
 	public void crearUsuario(Usuario obj) {
-		
-		String sql = "INSERT INTO Usuario VALUES ";
-
 		if (obj.isValid()) {
-			sql = sql + "(" + obj.getId_usuario() + "')";
+			String sql = "INSERT INTO CATEGORIA VALUES (" + obj.getId_usuario() + ",'" + obj.getUser_nombre() + "')";
 			try {
-				if(OracleJDBC.ejecutar(sql)>1)
-					OracleJDBC.commit();
-				System.out.println("Usuario creada\n");
+				OracleJDBC.ejecutarQuery(sql);
+				OracleJDBC.commit();
+				System.out.println("Usuario creado\n");
 			} catch (Exception e) {
 				e.printStackTrace();
 			}			
@@ -91,13 +88,12 @@ public class UsuarioDAO {
 	}
 
 	public boolean actualizarUsuario(Usuario obj) {
-		String sql = "UPDATE * FROM Usuario WHERE ID_Usuario = ";
 		if (obj.isValid()) {
-			sql = sql + "(" + obj.getId_usuario() + "')";
-
+			String sql = "UPDATE USUARIO SET " + "cat_nombre = '" + obj.getUser_nombre()+ "', WHERE ID_USUARIO = " + obj.getId_usuario();
 			try {
-				if(OracleJDBC.ejecutar(sql)>1)
-					OracleJDBC.commit();
+				OracleJDBC.ejecutarQuery(sql);
+				OracleJDBC.commit();
+				System.out.println("Usuario actualizado\n");
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -111,13 +107,12 @@ public class UsuarioDAO {
 	}
 
 	public boolean borrarUsuario(Usuario obj) {
-		String sql = "DELETE FROM Usuario WHERE ID_Usuario = ";
 		if (obj.isValid()) {
-			sql = sql + "(" + obj.getId_usuario() + "')";
-
+			String sql = "DELETE FROM USUARIO WHERE ID_USUARIO = " + obj.getId_usuario();
 			try {
-				if(OracleJDBC.ejecutar(sql)>1)
-					OracleJDBC.commit();
+				OracleJDBC.ejecutarQuery(sql);
+				OracleJDBC.commit();
+				System.out.println("Usuario borrada\n");
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -129,7 +124,4 @@ public class UsuarioDAO {
 			return false;
 		}
 	}
-
-	
-	
 }

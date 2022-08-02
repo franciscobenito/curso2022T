@@ -7,6 +7,8 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
 
+import es.rf.tienda.exception.DAOException;
+
 public class OracleJDBC {
 	private static OracleJDBC instancia = null;
 	private static Connection conn;
@@ -160,18 +162,18 @@ public class OracleJDBC {
 	}
 
 	public static int consigueClave(String tabla, String campo) throws Exception {
-		String sql = "SELECT MAX(" + campo + ") FROM " + tabla;
+		String sql = "SELECT MAX(" + campo + ") as ix FROM " + tabla;
 		ResultSet rs = ejecutarQuery(sql);
-		
 		try {
 			if (rs.next())
 				System.out.println("Tiene datos");
 			else
 				return 1;
-			return rs.getInt(0) + 1;
+			return rs.getInt("ix") + 1;
 		} catch (SQLException e) {
 			e.printStackTrace();
-			throw new Exception("Error buscando PK :" + sql);
+			throw new DAOException("Error buscando PK :" + sql);
 		}
+
 	}
 }

@@ -19,8 +19,8 @@ public class CategoriaDAO{
 		List<Categoria> lista = new ArrayList<>();
 		try {
 			rs = OracleJDBC.ejecutarQuery(sql);
-			if(OracleJDBC.ejecutar(sql)>1)
-				OracleJDBC.commit();
+			OracleJDBC.ejecutarQuery(sql);
+			OracleJDBC.commit();
 			
 			while (rs.next()) {
 				  int id = rs.getInt("ID_CATEGORIA");
@@ -50,8 +50,8 @@ public class CategoriaDAO{
 		
 		try {
 			ResultSet rs = OracleJDBC.ejecutarQuery(sql);
-			if(OracleJDBC.ejecutar(sql)>1)
-				OracleJDBC.commit();
+			OracleJDBC.ejecutarQuery(sql);
+			OracleJDBC.commit();
 			cat = new Categoria(rs.getInt(1), rs.getString(2), rs.getString(3));
 		} catch (Exception e) {
 			e.getMessage();
@@ -65,8 +65,8 @@ public class CategoriaDAO{
 
 		try {
 			ResultSet rs = OracleJDBC.ejecutarQuery(sql);
-			if(OracleJDBC.ejecutar(sql)>1)
-				OracleJDBC.commit();
+			OracleJDBC.ejecutarQuery(sql);
+			OracleJDBC.commit();
 			Categoria c = new Categoria(rs.getInt(1), rs.getString(2), rs.getString(3));
 			lista.add(c);
 			
@@ -78,14 +78,11 @@ public class CategoriaDAO{
 	}
 	
 	public void crearCategoria(Categoria obj) {
-		
-		String sql = "INSERT INTO CATEGORIA VALUES ";
-
 		if (obj.isValid()) {
-			sql = sql + "(" + obj.getId() + ",'" + obj.getCat_nombre() + "','" + obj.getCat_descripcion() + "')";
+			String sql = "INSERT INTO CATEGORIA VALUES (" + obj.getId() + ",'" + obj.getCat_nombre() + "','" + obj.getCat_descripcion() + "')";
 			try {
-				if(OracleJDBC.ejecutar(sql)>1)
-					OracleJDBC.commit();
+				OracleJDBC.ejecutarQuery(sql);
+				OracleJDBC.commit();
 				System.out.println("Categoría creada\n");
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -96,13 +93,13 @@ public class CategoriaDAO{
 	}
 
 	public boolean actualizarCategoria(Categoria obj) {
-		String sql = "UPDATE * FROM CATEGORIA WHERE ID_CATEGORIA = ";
 		if (obj.isValid()) {
-			sql = sql + "(" + obj.getId() + ",'" + obj.getCat_nombre() + "','" + obj.getCat_descripcion() + "')";
-
+			String sql = "UPDATE CATEGORIA SET " + "cat_nombre = '" + obj.getCat_nombre()+ "', " + " cat_descripcion = '" 
+					+ obj.getCat_descripcion() +"' WHERE ID_CATEGORIA = " + obj.getId();
 			try {
-				if(OracleJDBC.ejecutar(sql)>1)
-					OracleJDBC.commit();
+				OracleJDBC.ejecutarQuery(sql);
+				OracleJDBC.commit();
+				System.out.println("Categoría actualizada\n");
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -116,13 +113,12 @@ public class CategoriaDAO{
 	}
 
 	public boolean borrarCategoria(Categoria obj) {
-		String sql = "DELETE FROM CATEGORIA WHERE ID_CATEGORIA = ";
 		if (obj.isValid()) {
-			sql = sql + "(" + obj.getId() + ",'" + obj.getCat_nombre() + "','" + obj.getCat_descripcion() + "')";
-
+			String sql = "DELETE FROM CATEGORIA WHERE ID_CATEGORIA = " + obj.getId();
 			try {
-				if(OracleJDBC.ejecutar(sql)>1)
-					OracleJDBC.commit();
+				OracleJDBC.ejecutarQuery(sql);
+				OracleJDBC.commit();
+				System.out.println("Categoría borrada\n");
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -134,7 +130,4 @@ public class CategoriaDAO{
 			return false;
 		}
 	}
-
-	
-	
 }

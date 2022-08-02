@@ -49,6 +49,16 @@ public class Menu {
 		frame.setVisible(true);
 		
 		//Acción botones
+		productos.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				try {
+					@SuppressWarnings("unused")
+					VistaProducto vistaP = new VistaProducto();
+				} catch (DAOException | DomainException e1) {
+					e1.printStackTrace();
+				}
+			}
+		});
 		categorias.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				try {
