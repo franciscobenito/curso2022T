@@ -18,47 +18,36 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
-import es.rf.tienda.controladores.ControladorCat;
-import es.rf.tienda.dominio.Categoria;
+import es.rf.tienda.controladores.ControladorUsu;
+import es.rf.tienda.dominio.Usuario;
 import es.rf.tienda.exception.DAOException;
 import es.rf.tienda.exception.DomainException;
 
-public class VistaCategoria{
+public class VistaUsuario {
 
 	private JFrame frame;
 	private JPanel panel;
 	private JPanel panelLabel;
 	private JPanel panelTabla;
 	private JPanel panelButton;
-	private JLabel catLabel;
+	private JLabel usuLabel;
 	private JButton botonCrear;
 	private JButton botonModif;
 	private JButton botonVer;
 	private JButton botonBorrar;
 	private JButton botonSalir;
-	private JTable tablaCat;
+	private JTable tablaUsu;
 	private JScrollPane scroll;
 	
-	private static ControladorCat controlador;
-	private Categoria cat;
+	private static ControladorUsu controlador;
+	private Usuario usu;
 	
-	/**
-	 * Constructor de la clase
-	 * @throws DAOException
-	 * @throws DomainException
-	 */
-	public VistaCategoria() throws DAOException, DomainException{
-		vista("Categorias");				//TODO: solucionar SCROLL y que se actualice la tabla cuando se crea, modifica o borra una categoría
+	public VistaUsuario() throws DAOException, DomainException{
+		vista("Usuarios");				//TODO: solucionar los dos errores como los de VistaCategoría y, además, terminar la clase. Faltan columnas de la tabla para ver/modificar
 	}
 
-	/**
-	 * Crea la pantalla principal de las categorías
-	 * @param title Título de la ventana
-	 * @throws DAOException
-	 * @throws DomainException
-	 */
 	public void vista (String title) throws DAOException, DomainException {
-		controlador = new ControladorCat();
+		controlador = new ControladorUsu();
 		
 		//Ventana principal
 		frame = new JFrame(title);
@@ -77,43 +66,40 @@ public class VistaCategoria{
 		panelButton.setLayout(new FlowLayout());
 				
 		//Contenedores
-		catLabel = new JLabel("Tabla de categorías");
-		botonCrear = new JButton("Nueva");
+		usuLabel = new JLabel("Tabla de usuarios");
+		botonCrear = new JButton("Nuevo");
 		botonModif = new JButton("Modificar");
 		botonVer = new JButton("Ver");
 		botonBorrar = new JButton("Borrar");
 		botonSalir = new JButton("Salir");
 		
 		//Tabla
-		List<Categoria> listaCat = controlador.leerTodos();
-		String[][] objeto = new String[listaCat.size()][3];
-		for(int i = 0; i < listaCat.size(); i++) {
-			objeto[i][0] = Integer.toString(listaCat.get(i).getId());
-			objeto[i][1] = listaCat.get(i).getCat_nombre();
-			objeto[i][2] = listaCat.get(i).getCat_descripcion();
+		List<Usuario> listaUsu = controlador.leerTodos();
+		String[][] objeto = new String[listaUsu.size()][3];
+		for(int i = 0; i < listaUsu.size(); i++) {
+			objeto[i][0] = Integer.toString(listaUsu.get(i).getId_usuario());
+			objeto[i][1] = listaUsu.get(i).getUser_nombre();
 		}
-        String[] tituloCol = { "ID", "Nombre", "Descripcion" };
-        tablaCat = new JTable(objeto, tituloCol);
-		scroll = new JScrollPane(tablaCat, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
+        String[] tituloCol = { "ID", "Nombre"};
+        tablaUsu = new JTable(objeto, tituloCol);
+		scroll = new JScrollPane(tablaUsu, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
 		
 		//Activo el listener para seleccionar una fila de la tabla
-		tablaCat.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+		tablaUsu.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
 			@Override
 			public void valueChanged(ListSelectionEvent e) {
 				if(!e.getValueIsAdjusting()) {
-			    	if (tablaCat.getSelectedRow() > -1) {
-			        	int idSelec = Integer.parseInt(tablaCat.getValueAt(tablaCat.getSelectedRow(), 0).toString());
-			        	String nombreSelec = tablaCat.getValueAt(tablaCat.getSelectedRow(), 1).toString();
-			        	String descSelec = tablaCat.getValueAt(tablaCat.getSelectedRow(), 2).toString();
-			        	cat=new Categoria(idSelec, nombreSelec, descSelec);
+			    	if (tablaUsu.getSelectedRow() > -1) {
+			        	int idSelec = Integer.parseInt(tablaUsu.getValueAt(tablaUsu.getSelectedRow(), 0).toString());
+			        	usu=new Usuario(idSelec);
 			        }
 		    	}
 			}
 		});
 		
 		//Añadimos los paneles al panel principal
-		panelLabel.add(catLabel);
-		panelTabla.add(tablaCat);
+		panelLabel.add(usuLabel);
+		panelTabla.add(tablaUsu);
 		panelTabla.add(scroll, BorderLayout.CENTER);
 		panelButton.add(botonCrear);
 		panelButton.add(botonModif);
@@ -131,22 +117,22 @@ public class VistaCategoria{
 		//Acción botones
 		botonCrear.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				crearNuevaCat();
+				crearNuevoUsu();
 			}
 		});
 		botonModif.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				modificarCat(cat);
+				modificarUsu(usu);
 			}
 		});
 		botonVer.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				verCategoria(cat);
+				verUsuario(usu);
 			}
 		});
 		botonBorrar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				borrarCategoria(cat);
+				borrarUsuario(usu);
 			}
 		});
 		botonSalir.addActionListener(new ActionListener() {
@@ -158,31 +144,31 @@ public class VistaCategoria{
 	}
 	
 	/**
-	 * CREA UNA CATEGORIA NUEVA
+	 * CREA UNA USUARIO NUEVO
 	 */
-	public void crearNuevaCat() {
-		ventanaNueva("Crear categoría");
+	public void crearNuevoUsu() {
+		ventanaNueva("Crear usuario");
 	}
 	
 	/**
 	 * MODIFICA UNA CATEGORIA
 	 * @param cat Categoría a modificar
 	 */
-	public void modificarCat(Categoria cat) {
-		ventanaNueva("Modificar categoría");
+	public void modificarUsu(Usuario usu) {
+		ventanaNueva("Modificar usuario");
 	}
 	
 	/**
 	 * MUESTRA UNA CATEGORIA 
 	 * @param cat Categoría a ver
 	 */
-	public void verCategoria(Categoria cat) {
-		controlador.leer(cat);
-		ventanaNueva("Ver categoría");
+	public void verUsuario(Usuario usu) {
+		controlador.leer(usu);
+		ventanaNueva("Ver usuario");
 	}
 	
-	public void borrarCategoria(Categoria cat) {
-		if (controlador.borrar(cat))
+	public void borrarUsuario(Usuario usu) {
+		if (controlador.borrar(usu))
 			System.out.println("Categoria borrada");
 	}
 	
@@ -215,7 +201,6 @@ public class VistaCategoria{
 		//Contenedores
 		JLabel idLabel = new JLabel("ID");
 		JLabel nombreLabel = new JLabel("Nombre");
-		JLabel descrLabel = new JLabel("Descripcion");
 		JTextField idText = new JTextField();
 		idText.setEditable(false);
 		JTextField nombreText = new JTextField();
@@ -225,33 +210,27 @@ public class VistaCategoria{
 		JButton botonSalir = new JButton("Salir");
 		
 		switch (titulo) {
-			case "Crear categoría":
+			case "Crear usuario":
 				panelButton2.add(botonAceptarCrear);	
 			break;
 				
-			case "Modificar categoría":
-				idText.setText(""+cat.getId());
-				nombreText.setText(cat.getCat_nombre());
+			case "Modificar usuario":
+				idText.setText(""+usu.getId_usuario());
+				nombreText.setText(usu.getUser_nombre());
 				nombreText.setEditable(true);
-				descripcionText.setText(cat.getCat_descripcion());
-				descripcionText.setEditable(true);
-				
 				panelButton2.add(botonAceptarModif);	
 			break;
 			
-			case "Ver categoría":
-				idText.setText(""+cat.getId());
-				nombreText.setText(cat.getCat_nombre());
+			case "Ver usuario":
+				idText.setText(""+usu.getId_usuario());
+				nombreText.setText(usu.getUser_nombre());
 				nombreText.setEditable(false);
-				descripcionText.setText(cat.getCat_descripcion());
-				descripcionText.setEditable(false);
 			break;
 		}
 		
 		panelButton2.add(botonSalir);	
 		panelLabel2.add(idLabel);
 		panelLabel2.add(nombreLabel);
-		panelLabel2.add(descrLabel);
 		panelText2.add(idText);
 		panelText2.add(nombreText);
 		panelText2.add(descripcionText);
@@ -260,8 +239,8 @@ public class VistaCategoria{
 		botonAceptarCrear.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				if(!nombreText.getText().equals("")) {
-					cat = new Categoria(Integer.parseInt(idText.getText()), nombreText.getText(), descripcionText.getText());
-					controlador.grabar(cat);
+					usu = new Usuario(Integer.parseInt(idText.getText()));
+					controlador.grabar(usu);
 				}
 				
 				frame2.setVisible(false);
@@ -270,9 +249,9 @@ public class VistaCategoria{
 		});	
 		botonAceptarModif.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {	
-				Categoria catActualizada = new Categoria(Integer.parseInt(idText.getText()), nombreText.getText(), descripcionText.getText());
-				if (controlador.actualizar(catActualizada))
-					System.out.println("Categoria modificada");
+				Usuario usuActualizado = new Usuario(Integer.parseInt(idText.getText()));
+				if (controlador.actualizar(usuActualizado))
+					System.out.println("Usuario modificado");
 				
 			    frame2.setVisible(false);
 				frame2.dispose();

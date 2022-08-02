@@ -9,7 +9,8 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
-import es.rf.tienda.objetos.daos.OracleJDBC;
+import es.rf.tienda.exception.DAOException;
+import es.rf.tienda.exception.DomainException;
 
 public class Menu {
 	private static JFrame frame;
@@ -18,14 +19,9 @@ public class Menu {
 	private static JButton categorias;
 	private static JButton usuarios;
 	private static JButton salir;
-	
-	public static void main(String[] args) {
-		//MODELO-VISTA(sin acceso a disco(BBDD))-CONTROLADOR
-		
-		//Arranco la BBDD
-		//OracleJDBC bbdd = new OracleJDBC();
-		
-		//Ventana principal 
+
+	public static void main(String[] args) throws DAOException, DomainException {
+		//Ventana principal
 		vistaMenu("Menu");		
 	}
 
@@ -53,9 +49,34 @@ public class Menu {
 		frame.setVisible(true);
 		
 		//Acción botones
+		productos.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				try {
+					@SuppressWarnings("unused")
+					VistaProducto vistaP = new VistaProducto();
+				} catch (DAOException | DomainException e1) {
+					e1.printStackTrace();
+				}
+			}
+		});
 		categorias.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				VistaCategoria obj = new VistaCategoria();
+				try {
+					@SuppressWarnings("unused")
+					VistaCategoria vistaC = new VistaCategoria();
+				} catch (DAOException | DomainException e1) {
+					e1.printStackTrace();
+				}
+			}
+		});
+		usuarios.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				try {
+					@SuppressWarnings("unused")
+					VistaUsuario vistaU = new VistaUsuario();
+				} catch (DAOException | DomainException e1) {
+					e1.printStackTrace();
+				}
 			}
 		});
 		salir.addActionListener(new ActionListener() {

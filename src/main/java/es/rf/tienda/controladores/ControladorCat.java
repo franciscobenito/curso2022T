@@ -5,54 +5,46 @@ import java.util.Map;
 
 import es.rf.tienda.dominio.Categoria;
 import es.rf.tienda.exception.DAOException;
-import es.rf.tienda.interfaces.daos.ICategoria;
+import es.rf.tienda.exception.DomainException;
 import es.rf.tienda.objetos.daos.CategoriaDAO;
 
 public class ControladorCat implements Controlador<Categoria>{
 
-	private ICategoria cDAO;
+	private CategoriaDAO cDAO;
 	
-	public ControladorCat() {
+	public ControladorCat() throws DAOException, DomainException {
+		super();
 		cDAO = new CategoriaDAO();
 	}
 	
 	@Override
 	public Categoria leer(Categoria obj) {
-		try {
-			return cDAO.leerRegistro(obj);
-		} catch (DAOException e) {
-			e.printStackTrace();
-			return null;
-		}
+		return cDAO.listarUnaCategoria(obj);
 	}
 
 	@Override
 	public List<Categoria> leerTodos() {
-		return cDAO.leerTodos();
+		return cDAO.listarCategorias();
 	}
 
 	@Override
 	public List<Categoria> leerSQL(String sql) {
-		// TODO Auto-generated method stub
-		return null;
+		return cDAO.leerSQL(sql);
 	}
-
+	
 	@Override
-	public boolean grabar(Categoria obj) {
-		// TODO Auto-generated method stub
-		return false;
+	public void grabar(Categoria obj) {
+		cDAO.crearCategoria(obj);
 	}
 
 	@Override
 	public boolean actualizar(Categoria obj) {
-		// TODO Auto-generated method stub
-		return false;
+		return cDAO.actualizarCategoria(obj);			
 	}
 
 	@Override
 	public boolean borrar(Categoria obj) {
-		// TODO Auto-generated method stub
-		return false;
+		return cDAO.borrarCategoria(obj);
 	}
 
 	@Override
@@ -60,5 +52,4 @@ public class ControladorCat implements Controlador<Categoria>{
 		// TODO Auto-generated method stub
 		return null;
 	}
-
 }

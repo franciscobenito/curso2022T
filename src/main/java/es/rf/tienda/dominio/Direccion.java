@@ -1,13 +1,13 @@
 package es.rf.tienda.dominio;
 
-
+import es.rf.tienda.util.Validator;
 
 public class Direccion {
 
-	private static final int NOMBRE_LONG_MAX = 30;
+	/*private static final int NOMBRE_LONG_MAX = 30;
 	private static final int NOMBRE_LONG_MIN = 5;
 	private static final int DIRECCION_LONG_MAX = 30;
-	private static final int DIRECCION_LONG_MIN = 5;
+	private static final int DIRECCION_LONG_MIN = 5;*/
 	
 	private String dir_nombre;
 	private String dir_direccion;
@@ -27,6 +27,12 @@ public class Direccion {
 		dir_provincia=null;
 		dir_pais=null;
 		dir_correoE=null;
+	}
+	
+	public boolean isValid(){	
+		return !Validator.isVacio(dir_nombre) && !Validator.isVacio(dir_direccion) && !Validator.isVacio(dir_poblacion) 
+				&& !Validator.isVacio(dir_cPostal) && !Validator.isVacio(dir_provincia) && !Validator.isVacio(dir_pais)
+				&& !Validator.isVacio(dir_correoE) && !Validator.isEmailValido(dir_correoE);
 	}
 	
 	public String getDir_nombre() {

@@ -4,7 +4,7 @@ import java.util.Date;
 
 public class Producto {
 	
-	private static final int IDPROD_LONG_MAX = 5;
+	/*private static final int IDPROD_LONG_MAX = 5;
 	private static final int IDPROD_LONG_MIN = 5;
 	private static final int DESCRIPCION_LONG_MAX = 100;
 	private static final int DESCRIPCION_LONG_MIN = 5;
@@ -15,7 +15,7 @@ public class Producto {
 	private static final int USORECOMENDADO_LONG_MAX = 2000;
 	private static final int USORECOMENDADO_LONG_MIN = 0;
 	private static final int ESTADO_LONG_MAX = 1;
-	private static final int ESTADO_LONG_MIN = 1;
+	private static final int ESTADO_LONG_MIN = 1;*/
 	
 	private String idProducto;
 	private String proDescripcion;
